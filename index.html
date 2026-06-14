@@ -603,11 +603,11 @@
         trackingNo:document.getElementById('f_tracking').value,
         shipper:document.getElementById('f_shipper').value
       });
-      await fetch(API+'?'+params);
+      await fetch(API+'?'+params, { method:'GET', mode:'no-cors' });
       closeOverlay('addOverlay');
       showToast('✅ ເພີ່ມ Order ສຳເລັດ!','success');
-      loadOrders();
       ['f_name','f_phone','f_fbid','f_product','f_amount','f_tracking'].forEach(id=>document.getElementById(id).value='');
+      setTimeout(() => loadOrders(), 2500);
     } catch(e) { showToast('❌ ເກີດຂໍ້ຜິດພາດ','error'); }
     btn.textContent='💾 ບັນທຶກ'; btn.disabled=false;
   }
@@ -631,10 +631,10 @@
         status:document.getElementById('u_status').value,
         notes:document.getElementById('u_notes').value
       });
-      await fetch(API+'?'+params);
+      await fetch(API+'?'+params, { method:'GET', mode:'no-cors' });
       closeOverlay('updateOverlay');
       showToast('✅ ອັບເດດສຳເລັດ!','success');
-      loadOrders();
+      setTimeout(() => loadOrders(), 2500);
     } catch(e) { showToast('❌ ເກີດຂໍ້ຜິດພາດ','error'); }
     btn.textContent='💾 ອັບເດດ'; btn.disabled=false;
   }
