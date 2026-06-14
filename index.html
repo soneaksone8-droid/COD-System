@@ -6,209 +6,151 @@
 <title>COD Order System</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@300;400;600;700&display=swap');
-
   :root {
-    --bg: #0f1117;
-    --surface: #1a1d27;
-    --surface2: #22263a;
-    --accent: #6c63ff;
-    --accent2: #ff6584;
-    --green: #00d48b;
-    --yellow: #ffb300;
-    --red: #ff4d6d;
-    --purple: #c084fc;
-    --blue: #38bdf8;
-    --text: #e8eaf6;
-    --text2: #8892b0;
-    --border: rgba(108,99,255,0.15);
+    --bg:#0f1117; --surface:#1a1d27; --surface2:#22263a;
+    --accent:#6c63ff; --accent2:#ff6584;
+    --green:#00d48b; --yellow:#ffb300; --red:#ff4d6d;
+    --purple:#c084fc; --blue:#38bdf8;
+    --text:#e8eaf6; --text2:#8892b0;
+    --border:rgba(108,99,255,0.15);
   }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'Noto Sans Lao', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Noto Sans Lao',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
 
   /* HEADER */
-  .header {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 16px 24px;
-    display: flex; justify-content: space-between; align-items: center;
-    position: sticky; top: 0; z-index: 100;
-  }
-  .logo { display: flex; align-items: center; gap: 12px; }
-  .logo-icon {
-    width: 36px; height: 36px;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px;
-  }
-  .logo-text { font-size: 16px; font-weight: 700; }
-  .logo-sub { font-size: 11px; color: var(--text2); margin-top: 1px; }
-  .header-right { display: flex; gap: 10px; align-items: center; }
+  .header{background:var(--surface);border-bottom:1px solid var(--border);padding:16px 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;}
+  .logo{display:flex;align-items:center;gap:12px;}
+  .logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;}
+  .logo-text{font-size:16px;font-weight:700;}
+  .logo-sub{font-size:11px;color:var(--text2);margin-top:1px;}
+  .header-right{display:flex;gap:10px;align-items:center;}
 
   /* BUTTONS */
-  .btn {
-    padding: 9px 18px; border: none; border-radius: 8px;
-    cursor: pointer; font-family: inherit; font-size: 13px; font-weight: 600;
-    transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px;
-  }
-  .btn-primary { background: var(--accent); color: white; }
-  .btn-primary:hover { background: #5a52e0; transform: translateY(-1px); }
-  .btn-ghost { background: var(--surface2); color: var(--text2); border: 1px solid var(--border); }
-  .btn-ghost:hover { color: var(--text); border-color: var(--accent); }
-  .btn-success { background: var(--green); color: #0a2a1e; }
-  .btn-sm { padding: 5px 12px; font-size: 12px; border-radius: 6px; }
+  .btn{padding:9px 18px;border:none;border-radius:8px;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;transition:all 0.2s;display:inline-flex;align-items:center;gap:6px;}
+  .btn-primary{background:var(--accent);color:white;}
+  .btn-primary:hover{background:#5a52e0;transform:translateY(-1px);}
+  .btn-ghost{background:var(--surface2);color:var(--text2);border:1px solid var(--border);}
+  .btn-ghost:hover{color:var(--text);border-color:var(--accent);}
+  .btn-success{background:var(--green);color:#0a2a1e;}
+  .btn-sm{padding:5px 12px;font-size:12px;border-radius:6px;}
 
-  /* STATS SECTION */
-  .stats-section { padding: 20px 24px 0; }
-  .stats-title { font-size: 11px; color: var(--text2); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+  /* DATE FILTER BAR */
+  .date-bar{padding:16px 24px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+  .date-bar label{font-size:12px;color:var(--text2);font-weight:600;}
+  .date-input{background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;font-size:13px;padding:7px 12px;outline:none;transition:border-color 0.2s;}
+  .date-input:focus{border-color:var(--accent);}
+  .date-shortcuts{display:flex;gap:6px;margin-left:4px;}
+  .date-btn{padding:5px 12px;border-radius:16px;border:1px solid var(--border);background:transparent;color:var(--text2);font-family:inherit;font-size:11px;cursor:pointer;transition:all 0.2s;}
+  .date-btn:hover,.date-btn.active{background:var(--accent);color:white;border-color:var(--accent);}
+  .date-summary{margin-left:auto;font-size:12px;color:var(--text2);}
 
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-    margin-bottom: 12px;
-  }
-  .stats-grid-money {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-    margin-bottom: 20px;
-  }
+  /* STATS */
+  .stats-section{padding:20px 24px 0;}
+  .stats-label{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;}
+  .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:12px;}
+  .stats-grid-money{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+  .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;position:relative;overflow:hidden;}
+  .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+  .stat-card.c-total::before{background:var(--accent);}
+  .stat-card.c-pending::before{background:var(--yellow);}
+  .stat-card.c-delivered::before{background:var(--green);}
+  .stat-card.c-overdue::before{background:var(--red);}
+  .stat-card.c-cod-pending::before{background:var(--yellow);}
+  .stat-card.c-cod-collected::before{background:var(--green);}
+  .stat-card.c-cod-returned::before{background:var(--red);}
+  .stat-card.c-transfer::before{background:var(--blue);}
+  .stat-icon{position:absolute;right:14px;top:14px;font-size:20px;opacity:0.25;}
+  .stat-label-text{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;}
+  .stat-number{font-size:26px;font-weight:700;line-height:1;}
+  .stat-sub{font-size:11px;color:var(--text2);margin-top:4px;}
+  .stat-card.c-total .stat-number{color:var(--accent);}
+  .stat-card.c-pending .stat-number{color:var(--yellow);}
+  .stat-card.c-delivered .stat-number{color:var(--green);}
+  .stat-card.c-overdue .stat-number{color:var(--red);}
+  .stat-card.c-cod-pending .stat-number{color:var(--yellow);}
+  .stat-card.c-cod-collected .stat-number{color:var(--green);}
+  .stat-card.c-cod-returned .stat-number{color:var(--red);}
+  .stat-card.c-transfer .stat-number{color:var(--blue);}
 
-  .stat-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 18px;
-    position: relative;
-    overflow: hidden;
-  }
-  .stat-card::before {
-    content: ''; position: absolute;
-    top: 0; left: 0; right: 0; height: 3px;
-  }
-  .stat-card.c-total::before { background: var(--accent); }
-  .stat-card.c-pending::before { background: var(--yellow); }
-  .stat-card.c-delivered::before { background: var(--green); }
-  .stat-card.c-overdue::before { background: var(--red); }
-  .stat-card.c-cod-pending::before { background: var(--yellow); }
-  .stat-card.c-cod-collected::before { background: var(--green); }
-  .stat-card.c-cod-returned::before { background: var(--red); }
-  .stat-card.c-transfer::before { background: var(--blue); }
-
-  .stat-icon { position: absolute; right: 14px; top: 14px; font-size: 20px; opacity: 0.25; }
-  .stat-label { font-size: 10px; color: var(--text2); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
-  .stat-number { font-size: 28px; font-weight: 700; line-height: 1; }
-  .stat-sub { font-size: 11px; color: var(--text2); margin-top: 4px; }
-
-  .stat-card.c-total .stat-number { color: var(--accent); }
-  .stat-card.c-pending .stat-number { color: var(--yellow); }
-  .stat-card.c-delivered .stat-number { color: var(--green); }
-  .stat-card.c-overdue .stat-number { color: var(--red); }
-  .stat-card.c-cod-pending .stat-number { color: var(--yellow); }
-  .stat-card.c-cod-collected .stat-number { color: var(--green); }
-  .stat-card.c-cod-returned .stat-number { color: var(--red); }
-  .stat-card.c-transfer .stat-number { color: var(--blue); }
-
-  .divider {
-    height: 1px; background: var(--border);
-    margin: 0 24px 16px;
-  }
+  .divider{height:1px;background:var(--border);margin:0 24px 16px;}
 
   /* FILTERS */
-  .filters {
-    padding: 0 24px 16px;
-    display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
-  }
-  .filter-btn {
-    padding: 6px 14px; border-radius: 20px;
-    border: 1px solid var(--border); background: transparent;
-    color: var(--text2); font-family: inherit; font-size: 12px; cursor: pointer;
-    transition: all 0.2s;
-  }
-  .filter-btn.active, .filter-btn:hover { background: var(--accent); color: white; border-color: var(--accent); }
-  .search-box {
-    margin-left: auto; display: flex; align-items: center; gap: 8px;
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 8px; padding: 6px 12px;
-  }
-  .search-box input {
-    background: transparent; border: none; outline: none;
-    color: var(--text); font-family: inherit; font-size: 13px; width: 180px;
-  }
-  .search-box input::placeholder { color: var(--text2); }
+  .filters{padding:0 24px 16px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+  .filter-btn{padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text2);font-family:inherit;font-size:12px;cursor:pointer;transition:all 0.2s;}
+  .filter-btn.active,.filter-btn:hover{background:var(--accent);color:white;border-color:var(--accent);}
+  .search-box{margin-left:auto;display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 12px;}
+  .search-box input{background:transparent;border:none;outline:none;color:var(--text);font-family:inherit;font-size:13px;width:180px;}
+  .search-box input::placeholder{color:var(--text2);}
 
   /* TABLE */
-  .table-section { padding: 0 24px 24px; }
-  .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
-  table { width: 100%; border-collapse: collapse; }
-  thead tr { background: var(--surface2); }
-  th { padding: 13px 16px; text-align: left; font-size: 11px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); }
-  td { padding: 12px 16px; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: middle; }
-  tr:last-child td { border-bottom: none; }
-  tr:hover td { background: rgba(108,99,255,0.05); }
-
-  .order-id { font-size: 11px; color: var(--text2); font-family: monospace; }
-  .customer-name { font-weight: 600; }
-  .customer-phone { font-size: 11px; color: var(--text2); margin-top: 2px; }
-  .amount-text { font-weight: 700; color: var(--text); }
+  .table-section{padding:0 24px 24px;}
+  .table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;}
+  table{width:100%;border-collapse:collapse;}
+  thead tr{background:var(--surface2);}
+  th{padding:12px 14px;text-align:left;font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;border-bottom:1px solid var(--border);white-space:nowrap;}
+  td{padding:11px 14px;font-size:13px;border-bottom:1px solid rgba(255,255,255,0.04);vertical-align:middle;}
+  tr:last-child td{border-bottom:none;}
+  tr:hover td{background:rgba(108,99,255,0.05);}
+  .order-id{font-size:10px;color:var(--text2);font-family:monospace;}
+  .customer-name{font-weight:600;}
+  .customer-phone{font-size:11px;color:var(--text2);margin-top:2px;}
+  .date-cell{font-size:12px;color:var(--text);}
+  .date-cell-sub{font-size:10px;color:var(--text2);margin-top:2px;}
+  .amount-text{font-weight:700;}
 
   /* BADGES */
-  .badge { padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 600; display: inline-block; }
-  .badge-pending { background: rgba(255,179,0,0.15); color: var(--yellow); }
-  .badge-delivered { background: rgba(0,212,139,0.15); color: var(--green); }
-  .badge-overdue { background: rgba(255,77,109,0.15); color: var(--red); }
-  .badge-cancelled { background: rgba(136,146,176,0.15); color: var(--text2); }
-  .badge-cod { background: rgba(255,179,0,0.12); color: var(--yellow); border: 1px solid rgba(255,179,0,0.3); }
-  .badge-transfer { background: rgba(56,189,248,0.12); color: var(--blue); border: 1px solid rgba(56,189,248,0.3); }
+  .badge{padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;display:inline-block;}
+  .badge-pending{background:rgba(255,179,0,0.15);color:var(--yellow);}
+  .badge-delivered{background:rgba(0,212,139,0.15);color:var(--green);}
+  .badge-overdue{background:rgba(255,77,109,0.15);color:var(--red);}
+  .badge-cancelled{background:rgba(136,146,176,0.15);color:var(--text2);}
+  .badge-returned{background:rgba(255,77,109,0.15);color:var(--red);}
+  .badge-cod{background:rgba(255,179,0,0.12);color:var(--yellow);border:1px solid rgba(255,179,0,0.3);}
+  .badge-transfer{background:rgba(56,189,248,0.12);color:var(--blue);border:1px solid rgba(56,189,248,0.3);}
+  .days-badge{padding:4px 8px;border-radius:6px;font-size:11px;font-weight:700;display:inline-block;}
+  .days-ok{background:rgba(0,212,139,0.1);color:var(--green);}
+  .days-warn{background:rgba(255,179,0,0.1);color:var(--yellow);}
+  .days-critical{background:rgba(255,77,109,0.15);color:var(--red);}
+  .days-done{color:var(--green);}
 
-  /* DAYS */
-  .days-badge { padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; display: inline-block; }
-  .days-ok { background: rgba(0,212,139,0.1); color: var(--green); }
-  .days-warn { background: rgba(255,179,0,0.1); color: var(--yellow); }
-  .days-critical { background: rgba(255,77,109,0.15); color: var(--red); }
-  .days-done { color: var(--green); font-size: 16px; }
-
-  /* EMPTY / LOADING */
-  .empty-state { text-align: center; padding: 60px 20px; color: var(--text2); }
-  .empty-state .icon { font-size: 48px; margin-bottom: 12px; opacity: 0.5; }
-  .loading { text-align: center; padding: 40px; color: var(--text2); font-size: 13px; }
-  .spinner { width: 24px; height: 24px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 12px; }
-  @keyframes spin { to { transform: rotate(360deg); } }
+  /* EMPTY/LOADING */
+  .empty-state{text-align:center;padding:60px 20px;color:var(--text2);}
+  .empty-state .icon{font-size:48px;margin-bottom:12px;opacity:0.5;}
+  .loading{text-align:center;padding:40px;color:var(--text2);font-size:13px;}
+  .spinner{width:24px;height:24px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 12px;}
+  @keyframes spin{to{transform:rotate(360deg);}}
 
   /* MODAL */
-  .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 200; justify-content: center; align-items: center; backdrop-filter: blur(4px); }
-  .overlay.active { display: flex; }
-  .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 28px; width: 90%; max-width: 500px; max-height: 90vh; overflow-y: auto; animation: slideUp 0.2s ease; }
-  @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } }
-  .modal-title { font-size: 18px; font-weight: 700; margin-bottom: 24px; }
-
-  .form-group { margin-bottom: 14px; }
-  .form-label { display: block; font-size: 11px; font-weight: 600; color: var(--text2); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
-  .form-input, .form-select { width: 100%; padding: 10px 14px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: inherit; font-size: 14px; outline: none; transition: border-color 0.2s; }
-  .form-input:focus, .form-select:focus { border-color: var(--accent); }
-  .form-select option { background: var(--surface2); }
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .modal-footer { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+  .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;justify-content:center;align-items:center;backdrop-filter:blur(4px);}
+  .overlay.active{display:flex;}
+  .modal{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px;width:90%;max-width:500px;max-height:90vh;overflow-y:auto;animation:slideUp 0.2s ease;}
+  @keyframes slideUp{from{transform:translateY(20px);opacity:0;}}
+  .modal-title{font-size:18px;font-weight:700;margin-bottom:24px;}
+  .form-group{margin-bottom:14px;}
+  .form-label{display:block;font-size:11px;font-weight:600;color:var(--text2);margin-bottom:5px;text-transform:uppercase;letter-spacing:0.5px;}
+  .form-input,.form-select{width:100%;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;font-size:14px;outline:none;transition:border-color 0.2s;}
+  .form-input:focus,.form-select:focus{border-color:var(--accent);}
+  .form-select option{background:var(--surface2);}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .modal-footer{display:flex;gap:10px;justify-content:flex-end;margin-top:20px;}
 
   /* TOAST */
-  .toast { position: fixed; bottom: 24px; right: 24px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 20px; font-size: 13px; z-index: 999; transform: translateY(80px); opacity: 0; transition: all 0.3s; display: flex; align-items: center; gap: 10px; min-width: 220px; }
-  .toast.show { transform: translateY(0); opacity: 1; }
-  .toast.success { border-left: 3px solid var(--green); }
-  .toast.error { border-left: 3px solid var(--red); }
+  .toast{position:fixed;bottom:24px;right:24px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 20px;font-size:13px;z-index:999;transform:translateY(80px);opacity:0;transition:all 0.3s;display:flex;align-items:center;gap:10px;min-width:220px;}
+  .toast.show{transform:translateY(0);opacity:1;}
+  .toast.success{border-left:3px solid var(--green);}
+  .toast.error{border-left:3px solid var(--red);}
 
-  @media (max-width: 768px) {
-    .stats-grid, .stats-grid-money { grid-template-columns: repeat(2, 1fr); }
-    .stats-section { padding: 16px 16px 0; }
-    .divider { margin: 0 16px 12px; }
-    .filters { padding: 0 16px 12px; }
-    .search-box { margin-left: 0; width: 100%; }
-    .search-box input { width: 100%; }
-    .table-section { padding: 0 16px 16px; }
-    .header { padding: 12px 16px; }
-    .form-row { grid-template-columns: 1fr; }
-    th:nth-child(3), td:nth-child(3) { display: none; }
+  @media(max-width:900px){
+    .stats-grid,.stats-grid-money{grid-template-columns:repeat(2,1fr);}
+    th:nth-child(8),td:nth-child(8){display:none;}
+  }
+  @media(max-width:768px){
+    .stats-section{padding:16px 16px 0;}
+    .filters,.table-section{padding-left:16px;padding-right:16px;}
+    .date-bar{padding:12px 16px;}
+    .header{padding:12px 16px;}
+    .form-row{grid-template-columns:1fr;}
+    th:nth-child(3),td:nth-child(3),th:nth-child(7),td:nth-child(7){display:none;}
   }
 </style>
 </head>
@@ -229,76 +171,53 @@
   </div>
 </div>
 
+<!-- DATE FILTER BAR -->
+<div class="date-bar">
+  <label>📅 ຊ່ວງວັນທີ:</label>
+  <input type="date" class="date-input" id="dateFrom" onchange="applyFilter()">
+  <span style="color:var(--text2);font-size:13px">ຫາ</span>
+  <input type="date" class="date-input" id="dateTo" onchange="applyFilter()">
+  <div class="date-shortcuts">
+    <button class="date-btn" onclick="setDateRange('today')">ມື້ນີ້</button>
+    <button class="date-btn" onclick="setDateRange('week')">7 ວັນ</button>
+    <button class="date-btn" onclick="setDateRange('month')">ເດືອນນີ້</button>
+    <button class="date-btn" onclick="setDateRange('all')">ທັງໝົດ</button>
+  </div>
+  <div class="date-summary" id="dateSummary"></div>
+</div>
+
 <!-- STATS -->
 <div class="stats-section">
-
-  <div class="stats-title">📋 ສະຫຼຸບ Order</div>
+  <div class="stats-label">📋 ສະຫຼຸບ Order <span id="statsRangeLabel" style="color:var(--accent);font-weight:normal"></span></div>
   <div class="stats-grid">
-    <div class="stat-card c-total">
-      <div class="stat-icon">📋</div>
-      <div class="stat-label">ທັງໝົດ</div>
-      <div class="stat-number" id="sTotal">-</div>
-    </div>
-    <div class="stat-card c-pending">
-      <div class="stat-icon">⏳</div>
-      <div class="stat-label">ລໍຖ້າຮັບ</div>
-      <div class="stat-number" id="sPending">-</div>
-    </div>
-    <div class="stat-card c-delivered">
-      <div class="stat-icon">✅</div>
-      <div class="stat-label">ຮັບແລ້ວ</div>
-      <div class="stat-number" id="sDelivered">-</div>
-    </div>
-    <div class="stat-card c-overdue">
-      <div class="stat-icon">⚠️</div>
-      <div class="stat-label">ໃກ້ຕີກັບ</div>
-      <div class="stat-number" id="sOverdue">-</div>
-    </div>
+    <div class="stat-card c-total"><div class="stat-icon">📋</div><div class="stat-label-text">ທັງໝົດ</div><div class="stat-number" id="sTotal">-</div></div>
+    <div class="stat-card c-pending"><div class="stat-icon">⏳</div><div class="stat-label-text">ລໍຖ້າຮັບ</div><div class="stat-number" id="sPending">-</div></div>
+    <div class="stat-card c-delivered"><div class="stat-icon">✅</div><div class="stat-label-text">ຮັບແລ້ວ</div><div class="stat-number" id="sDelivered">-</div></div>
+    <div class="stat-card c-overdue"><div class="stat-icon">⚠️</div><div class="stat-label-text">ໃກ້ຕີກັບ</div><div class="stat-number" id="sOverdue">-</div></div>
   </div>
-
-  <div class="stats-title">💰 ສະຫຼຸບເງິນ</div>
+  <div class="stats-label">💰 ສະຫຼຸບເງິນ <span id="moneyRangeLabel" style="color:var(--accent);font-weight:normal"></span></div>
   <div class="stats-grid-money">
-    <div class="stat-card c-cod-pending">
-      <div class="stat-icon">⏳</div>
-      <div class="stat-label">COD ລໍຖ້າ</div>
-      <div class="stat-number" id="mCodPending">-</div>
-      <div class="stat-sub" id="mCodPendingCount">0 Order</div>
-    </div>
-    <div class="stat-card c-cod-collected">
-      <div class="stat-icon">💚</div>
-      <div class="stat-label">COD ເກັບໄດ້</div>
-      <div class="stat-number" id="mCodCollected">-</div>
-      <div class="stat-sub" id="mCodCollectedCount">0 Order</div>
-    </div>
-    <div class="stat-card c-cod-returned">
-      <div class="stat-icon">📦</div>
-      <div class="stat-label">COD ຕີກັບ</div>
-      <div class="stat-number" id="mCodReturned">-</div>
-      <div class="stat-sub" id="mCodReturnedCount">0 Order</div>
-    </div>
-    <div class="stat-card c-transfer">
-      <div class="stat-icon">🏦</div>
-      <div class="stat-label">ໂອນເງິນ</div>
-      <div class="stat-number" id="mTransfer">-</div>
-      <div class="stat-sub" id="mTransferCount">0 Order</div>
-    </div>
+    <div class="stat-card c-cod-pending"><div class="stat-icon">⏳</div><div class="stat-label-text">COD ລໍຖ້າ</div><div class="stat-number" id="mCodPending">-</div><div class="stat-sub" id="mCodPendingCount">0 Order</div></div>
+    <div class="stat-card c-cod-collected"><div class="stat-icon">💚</div><div class="stat-label-text">COD ເກັບໄດ້</div><div class="stat-number" id="mCodCollected">-</div><div class="stat-sub" id="mCodCollectedCount">0 Order</div></div>
+    <div class="stat-card c-cod-returned"><div class="stat-icon">📦</div><div class="stat-label-text">COD ຕີກັບ</div><div class="stat-number" id="mCodReturned">-</div><div class="stat-sub" id="mCodReturnedCount">0 Order</div></div>
+    <div class="stat-card c-transfer"><div class="stat-icon">🏦</div><div class="stat-label-text">ໂອນເງິນ</div><div class="stat-number" id="mTransfer">-</div><div class="stat-sub" id="mTransferCount">0 Order</div></div>
   </div>
-
 </div>
 
 <div class="divider"></div>
 
 <!-- FILTERS -->
 <div class="filters">
-  <button class="filter-btn active" onclick="filterOrders('all', this)">ທັງໝົດ</button>
-  <button class="filter-btn" onclick="filterOrders('pending', this)">⏳ ລໍຖ້າ</button>
-  <button class="filter-btn" onclick="filterOrders('delivered', this)">✅ ຮັບແລ້ວ</button>
-  <button class="filter-btn" onclick="filterOrders('overdue', this)">⚠️ ໃກ້ຕີກັບ</button>
-  <button class="filter-btn" onclick="filterOrders('cod', this)">💛 COD</button>
-  <button class="filter-btn" onclick="filterOrders('transfer', this)">🔵 ໂອນ</button>
+  <button class="filter-btn active" onclick="filterOrders('all',this)">ທັງໝົດ</button>
+  <button class="filter-btn" onclick="filterOrders('pending',this)">⏳ ລໍຖ້າ</button>
+  <button class="filter-btn" onclick="filterOrders('delivered',this)">✅ ຮັບແລ້ວ</button>
+  <button class="filter-btn" onclick="filterOrders('overdue',this)">⚠️ ໃກ້ຕີກັບ</button>
+  <button class="filter-btn" onclick="filterOrders('returned',this)">📦 ຕີກັບ</button>
+  <button class="filter-btn" onclick="filterOrders('cod',this)">💛 COD</button>
+  <button class="filter-btn" onclick="filterOrders('transfer',this)">🔵 ໂອນ</button>
   <div class="search-box">
     <span style="color:var(--text2);font-size:14px">🔍</span>
-    <input type="text" id="searchInput" placeholder="ຊອກຫາຊື່ / ເລກທາງ..." oninput="searchOrders()">
+    <input type="text" id="searchInput" placeholder="ຊອກຫາຊື່ / ເລກທາງ..." oninput="applyFilter()">
   </div>
 </div>
 
@@ -314,13 +233,14 @@
           <th>ຊຳລະ</th>
           <th>ຍອດ (ກີບ)</th>
           <th>ຂົນສົ່ງ / ເລກທາງ</th>
+          <th>ວັນສົ່ງ / ກຳນົດ</th>
           <th>ເຫຼືອ</th>
           <th>ສະຖານະ</th>
           <th>ຈັດການ</th>
         </tr>
       </thead>
       <tbody id="tableBody">
-        <tr><td colspan="9"><div class="loading"><div class="spinner"></div>ກຳລັງໂຫຼດ...</div></td></tr>
+        <tr><td colspan="10"><div class="loading"><div class="spinner"></div>ກຳລັງໂຫຼດ...</div></td></tr>
       </tbody>
     </table>
   </div>
@@ -331,39 +251,22 @@
   <div class="modal">
     <div class="modal-title">➕ ເພີ່ມ Order ໃໝ່</div>
     <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">ຊື່ລູກຄ້າ *</label>
-        <input class="form-input" id="f_name" placeholder="ຊື່ ນາມສະກຸນ">
-      </div>
-      <div class="form-group">
-        <label class="form-label">ເບີໂທ *</label>
-        <input class="form-input" id="f_phone" placeholder="020xxxxxxxx">
-      </div>
+      <div class="form-group"><label class="form-label">ຊື່ລູກຄ້າ *</label><input class="form-input" id="f_name" placeholder="ຊື່ ນາມສະກຸນ"></div>
+      <div class="form-group"><label class="form-label">ເບີໂທ *</label><input class="form-input" id="f_phone" placeholder="020xxxxxxxx"></div>
     </div>
-    <div class="form-group">
-      <label class="form-label">Facebook ID (ຖ້າມີ)</label>
-      <input class="form-input" id="f_fbid" placeholder="ປ່ອຍຫວ່າງໄດ້">
+    <div class="form-group"><label class="form-label">Facebook ID (ຖ້າມີ)</label><input class="form-input" id="f_fbid" placeholder="ປ່ອຍຫວ່າງໄດ້"></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">ສິນຄ້າ *</label><input class="form-input" id="f_product" placeholder="ເຊັ່ນ: ເສື້ອ Size M"></div>
+      <div class="form-group"><label class="form-label">ລາຄາ (ກີບ) *</label><input class="form-input" type="number" id="f_amount" placeholder="150000"></div>
     </div>
     <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">ສິນຄ້າ *</label>
-        <input class="form-input" id="f_product" placeholder="ເຊັ່ນ: ເສື້ອ Size M">
-      </div>
-      <div class="form-group">
-        <label class="form-label">ລາຄາ (ກີບ) *</label>
-        <input class="form-input" type="number" id="f_amount" placeholder="150000">
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">ວິທີຊຳລະ *</label>
+      <div class="form-group"><label class="form-label">ວິທີຊຳລະ *</label>
         <select class="form-select" id="f_payment">
           <option value="COD">💛 COD (ເກັບເງິນປາຍທາງ)</option>
           <option value="transfer">🔵 ໂອນເງິນກ່ອນ</option>
         </select>
       </div>
-      <div class="form-group">
-        <label class="form-label">ຂົນສົ່ງ *</label>
+      <div class="form-group"><label class="form-label">ຂົນສົ່ງ *</label>
         <select class="form-select" id="f_shipper">
           <option value="ຢູນິເທວ">ຢູນິເທວ</option>
           <option value="ອະນຸສິດ">ອະນຸສິດ</option>
@@ -372,10 +275,7 @@
         </select>
       </div>
     </div>
-    <div class="form-group">
-      <label class="form-label">ເລກທາງ</label>
-      <input class="form-input" id="f_tracking" placeholder="ໃສ່ທີຫຼັງໄດ້">
-    </div>
+    <div class="form-group"><label class="form-label">ເລກທາງ</label><input class="form-input" id="f_tracking" placeholder="ໃສ່ທີຫຼັງໄດ້"></div>
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeOverlay('addOverlay')">ຍົກເລີກ</button>
       <button class="btn btn-primary" onclick="submitAdd()" id="addBtn">💾 ບັນທຶກ</button>
@@ -388,12 +288,8 @@
   <div class="modal">
     <div class="modal-title">✏️ ອັບເດດ Order</div>
     <input type="hidden" id="u_row">
-    <div class="form-group">
-      <label class="form-label">ເລກທາງ</label>
-      <input class="form-input" id="u_tracking" placeholder="ເລກພັດສະດຸ">
-    </div>
-    <div class="form-group">
-      <label class="form-label">ສະຖານະ</label>
+    <div class="form-group"><label class="form-label">ເລກທາງ</label><input class="form-input" id="u_tracking" placeholder="ເລກພັດສະດຸ"></div>
+    <div class="form-group"><label class="form-label">ສະຖານະ</label>
       <select class="form-select" id="u_status">
         <option value="pending">⏳ ລໍຖ້າຮັບ</option>
         <option value="delivered">✅ ຮັບແລ້ວ</option>
@@ -401,10 +297,7 @@
         <option value="cancelled">❌ ຍົກເລີກ</option>
       </select>
     </div>
-    <div class="form-group">
-      <label class="form-label">ໝາຍເຫດ</label>
-      <input class="form-input" id="u_notes" placeholder="(ຖ້າມີ)">
-    </div>
+    <div class="form-group"><label class="form-label">ໝາຍເຫດ</label><input class="form-input" id="u_notes" placeholder="(ຖ້າມີ)"></div>
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeOverlay('updateOverlay')">ຍົກເລີກ</button>
       <button class="btn btn-success" onclick="submitUpdate()" id="updateBtn">💾 ອັບເດດ</button>
@@ -419,32 +312,125 @@
   let allOrders = [];
   let currentFilter = 'all';
 
+  // ຟໍແມັດເງິນ
   function fmt(n) {
-    if (!n || n == 0) return '-';
+    if (!n || n==0) return '-';
     return Number(n).toLocaleString('lo-LA') + ' ກີບ';
   }
   function fmtShort(n) {
-    if (!n || n == 0) return '-';
+    if (!n || n==0) return '0';
     const m = Number(n);
-    if (m >= 1000000) return (m/1000000).toFixed(1) + 'M';
-    if (m >= 1000) return (m/1000).toFixed(0) + 'K';
+    if (m>=1000000) return (m/1000000).toFixed(1)+'M';
+    if (m>=1000) return (m/1000).toFixed(0)+'K';
     return m.toLocaleString();
   }
 
+  // ຟໍແມັດວັນທີ
+  function fmtDate(d) {
+    if (!d) return '-';
+    const dt = new Date(d);
+    if (isNaN(dt)) return '-';
+    return dt.toLocaleDateString('lo-LA', {day:'2-digit',month:'2-digit',year:'numeric'});
+  }
+
+  // ຕັ້ງຊ່ວງວັນທີ
+  function setDateRange(type) {
+    const today = new Date();
+    const from = document.getElementById('dateFrom');
+    const to = document.getElementById('dateTo');
+    const toStr = today.toISOString().split('T')[0];
+
+    document.querySelectorAll('.date-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+
+    if (type === 'today') {
+      from.value = toStr; to.value = toStr;
+    } else if (type === 'week') {
+      const d = new Date(today); d.setDate(d.getDate()-6);
+      from.value = d.toISOString().split('T')[0]; to.value = toStr;
+    } else if (type === 'month') {
+      const d = new Date(today.getFullYear(), today.getMonth(), 1);
+      from.value = d.toISOString().split('T')[0]; to.value = toStr;
+    } else {
+      from.value = ''; to.value = '';
+    }
+    applyFilter();
+  }
+
+  // ໂຫຼດ Orders
   async function loadOrders() {
     document.getElementById('tableBody').innerHTML =
-      '<tr><td colspan="9"><div class="loading"><div class="spinner"></div>ກຳລັງໂຫຼດ...</div></td></tr>';
+      '<tr><td colspan="10"><div class="loading"><div class="spinner"></div>ກຳລັງໂຫຼດ...</div></td></tr>';
     try {
       const res = await fetch(API + '?action=getOrders');
       const data = await res.json();
       allOrders = data.orders || [];
-      renderTable(allOrders);
-      updateStats(allOrders);
+      applyFilter();
       document.getElementById('lastUpdate').textContent = 'ອັບເດດ: ' + new Date().toLocaleTimeString('lo-LA');
     } catch(e) {
       document.getElementById('tableBody').innerHTML =
-        '<tr><td colspan="9"><div class="empty-state"><div class="icon">⚠️</div><p>ໂຫຼດບໍ່ໄດ້ — ກວດສອບ API</p></div></td></tr>';
+        '<tr><td colspan="10"><div class="empty-state"><div class="icon">⚠️</div><p>ໂຫຼດບໍ່ໄດ້</p></div></td></tr>';
     }
+  }
+
+  // Filter ຫຼັກ — ລວມທັງ status + ວັນທີ + search
+  function applyFilter() {
+    const today = new Date(); today.setHours(0,0,0,0);
+    const fromVal = document.getElementById('dateFrom').value;
+    const toVal = document.getElementById('dateTo').value;
+    const fromDate = fromVal ? new Date(fromVal) : null;
+    const toDate = toVal ? new Date(toVal) : null;
+    if (toDate) toDate.setHours(23,59,59,999);
+    const q = document.getElementById('searchInput').value.toLowerCase();
+
+    let filtered = allOrders.filter(o => {
+      // Status filter
+      if (currentFilter === 'pending' && o.status !== 'pending') return false;
+      if (currentFilter === 'delivered' && o.status !== 'delivered') return false;
+      if (currentFilter === 'returned' && o.status !== 'returned') return false;
+      if (currentFilter === 'cod' && (o.payment_type||'COD') !== 'COD') return false;
+      if (currentFilter === 'transfer' && o.payment_type !== 'transfer') return false;
+      if (currentFilter === 'overdue') {
+        if (o.status !== 'pending') return false;
+        const dl = new Date(o.deadline); dl.setHours(0,0,0,0);
+        if (Math.ceil((dl-today)/(1000*60*60*24)) > 2) return false;
+      }
+      // Date filter
+      if (fromDate || toDate) {
+        const sd = new Date(o.send_date);
+        if (fromDate && sd < fromDate) return false;
+        if (toDate && sd > toDate) return false;
+      }
+      // Search
+      if (q) {
+        const match = o.customer_name.toLowerCase().includes(q) ||
+          o.customer_phone.includes(q) ||
+          (o.tracking_no||'').toLowerCase().includes(q) ||
+          (o.product||'').toLowerCase().includes(q);
+        if (!match) return false;
+      }
+      return true;
+    });
+
+    renderTable(filtered);
+    updateStats(filtered);
+
+    // ສະແດງ label ຊ່ວງວັນທີ
+    let rangeLabel = '';
+    if (fromVal && toVal) rangeLabel = `(${fmtDate(fromVal)} - ${fmtDate(toVal)})`;
+    else if (fromVal) rangeLabel = `(ຈາກ ${fmtDate(fromVal)})`;
+    else if (toVal) rangeLabel = `(ຮອດ ${fmtDate(toVal)})`;
+    else rangeLabel = '(ທັງໝົດ)';
+    document.getElementById('statsRangeLabel').textContent = rangeLabel;
+    document.getElementById('moneyRangeLabel').textContent = rangeLabel;
+    document.getElementById('dateSummary').textContent = `ສະແດງ ${filtered.length} / ${allOrders.length} Order`;
+  }
+
+  function filterOrders(filter, btn) {
+    currentFilter = filter;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    applyFilter();
   }
 
   function updateStats(orders) {
@@ -456,22 +442,22 @@
     let transferAmt=0, transferCnt=0;
 
     orders.forEach(o => {
-      const amt = Number(o.amount) || 0;
-      const isCOD = (o.payment_type || 'COD') === 'COD';
+      const amt = Number(o.amount)||0;
+      const isCOD = (o.payment_type||'COD') === 'COD';
       const dl = new Date(o.deadline); dl.setHours(0,0,0,0);
-      const days = Math.ceil((dl - today) / (1000*60*60*24));
+      const days = Math.ceil((dl-today)/(1000*60*60*24));
 
-      if (o.status === 'delivered') {
+      if (o.status==='delivered') {
         delivered++;
-        if (isCOD) { codCollectedAmt += amt; codCollectedCnt++; }
-        else { transferAmt += amt; transferCnt++; }
-      } else if (o.status === 'returned') {
-        if (isCOD) { codReturnedAmt += amt; codReturnedCnt++; }
-      } else if (o.status !== 'cancelled') {
+        if (isCOD) { codCollectedAmt+=amt; codCollectedCnt++; }
+        else { transferAmt+=amt; transferCnt++; }
+      } else if (o.status==='returned') {
+        if (isCOD) { codReturnedAmt+=amt; codReturnedCnt++; }
+      } else if (o.status!=='cancelled') {
         pending++;
-        if (days <= 2 && days >= 0) overdue++;
-        if (isCOD) { codPendingAmt += amt; codPendingCnt++; }
-        else { transferAmt += amt; transferCnt++; }
+        if (days<=2&&days>=0) overdue++;
+        if (isCOD) { codPendingAmt+=amt; codPendingCnt++; }
+        else { transferAmt+=amt; transferCnt++; }
       }
     });
 
@@ -479,175 +465,139 @@
     document.getElementById('sPending').textContent = pending;
     document.getElementById('sDelivered').textContent = delivered;
     document.getElementById('sOverdue').textContent = overdue;
-
     document.getElementById('mCodPending').textContent = fmtShort(codPendingAmt);
-    document.getElementById('mCodPendingCount').textContent = codPendingCnt + ' Order';
+    document.getElementById('mCodPendingCount').textContent = codPendingCnt+' Order';
     document.getElementById('mCodCollected').textContent = fmtShort(codCollectedAmt);
-    document.getElementById('mCodCollectedCount').textContent = codCollectedCnt + ' Order';
+    document.getElementById('mCodCollectedCount').textContent = codCollectedCnt+' Order';
     document.getElementById('mCodReturned').textContent = fmtShort(codReturnedAmt);
-    document.getElementById('mCodReturnedCount').textContent = codReturnedCnt + ' Order';
+    document.getElementById('mCodReturnedCount').textContent = codReturnedCnt+' Order';
     document.getElementById('mTransfer').textContent = fmtShort(transferAmt);
-    document.getElementById('mTransferCount').textContent = transferCnt + ' Order';
+    document.getElementById('mTransferCount').textContent = transferCnt+' Order';
   }
 
   function renderTable(orders) {
     if (!orders.length) {
       document.getElementById('tableBody').innerHTML =
-        '<tr><td colspan="9"><div class="empty-state"><div class="icon">📭</div><p>ຍັງບໍ່ມີ Order</p></div></td></tr>';
+        '<tr><td colspan="10"><div class="empty-state"><div class="icon">📭</div><p>ບໍ່ມີ Order ໃນຊ່ວງນີ້</p></div></td></tr>';
       return;
     }
     const today = new Date(); today.setHours(0,0,0,0);
     let html = '';
     orders.forEach(o => {
       const deadline = new Date(o.deadline); deadline.setHours(0,0,0,0);
-      const daysLeft = Math.ceil((deadline - today) / (1000*60*60*24));
-      const isCOD = (o.payment_type || 'COD') === 'COD';
+      const daysLeft = Math.ceil((deadline-today)/(1000*60*60*24));
+      const isCOD = (o.payment_type||'COD') === 'COD';
       let statusBadge='', daysBadge='';
 
-      if (o.status === 'delivered') {
-        statusBadge = '<span class="badge badge-delivered">✅ ຮັບແລ້ວ</span>';
-        daysBadge = '<span class="days-done">✅</span>';
-      } else if (o.status === 'returned') {
-        statusBadge = '<span class="badge badge-overdue">📦 ຕີກັບ</span>';
-        daysBadge = '-';
-      } else if (o.status === 'cancelled') {
-        statusBadge = '<span class="badge badge-cancelled">❌ ຍົກເລີກ</span>';
-        daysBadge = '-';
-      } else if (daysLeft < 0) {
-        statusBadge = '<span class="badge badge-overdue">⚠️ ເກີນກຳນົດ</span>';
-        daysBadge = `<span class="days-badge days-critical">${Math.abs(daysLeft)}ວັນ</span>`;
+      if (o.status==='delivered') {
+        statusBadge='<span class="badge badge-delivered">✅ ຮັບແລ້ວ</span>';
+        daysBadge='<span class="days-done">✅</span>';
+      } else if (o.status==='returned') {
+        statusBadge='<span class="badge badge-returned">📦 ຕີກັບ</span>';
+        daysBadge='-';
+      } else if (o.status==='cancelled') {
+        statusBadge='<span class="badge badge-cancelled">❌ ຍົກເລີກ</span>';
+        daysBadge='-';
+      } else if (daysLeft<0) {
+        statusBadge='<span class="badge badge-overdue">⚠️ ເກີນກຳນົດ</span>';
+        daysBadge=`<span class="days-badge days-critical">${Math.abs(daysLeft)}ວັນ</span>`;
       } else {
-        statusBadge = '<span class="badge badge-pending">⏳ ລໍຖ້າ</span>';
-        const cls = daysLeft<=1?'days-critical':daysLeft<=3?'days-warn':'days-ok';
-        daysBadge = `<span class="days-badge ${cls}">${daysLeft} ວັນ</span>`;
+        statusBadge='<span class="badge badge-pending">⏳ ລໍຖ້າ</span>';
+        const cls=daysLeft<=1?'days-critical':daysLeft<=3?'days-warn':'days-ok';
+        daysBadge=`<span class="days-badge ${cls}">${daysLeft}ວັນ</span>`;
       }
 
       const payBadge = isCOD
         ? '<span class="badge badge-cod">COD</span>'
         : '<span class="badge badge-transfer">ໂອນ</span>';
 
-      const trackingDisplay = o.tracking_no
-        ? `<div style="font-family:monospace;font-size:12px">${o.tracking_no}</div><div style="font-size:11px;color:var(--text2)">${o.shipper}</div>`
-        : `<span style="color:var(--text2);font-size:12px">${o.shipper}</span>`;
+      const trackInfo = o.tracking_no
+        ? `<div style="font-family:monospace;font-size:11px">${o.tracking_no}</div><div style="font-size:10px;color:var(--text2)">${o.shipper}</div>`
+        : `<span style="color:var(--text2);font-size:11px">${o.shipper}</span>`;
 
       html += `<tr>
         <td><div class="order-id">${o.order_id}</div></td>
-        <td>
-          <div class="customer-name">${o.customer_name}</div>
-          <div class="customer-phone">${o.customer_phone}</div>
-        </td>
+        <td><div class="customer-name">${o.customer_name}</div><div class="customer-phone">${o.customer_phone}</div></td>
         <td>${o.product}</td>
         <td>${payBadge}</td>
-        <td><div class="amount-text">${fmt(o.amount)}</div></td>
-        <td>${trackingDisplay}</td>
+        <td><span class="amount-text">${fmt(o.amount)}</span></td>
+        <td>${trackInfo}</td>
+        <td>
+          <div class="date-cell">${fmtDate(o.send_date)}</div>
+          <div class="date-cell-sub">ກຳນົດ: ${fmtDate(o.deadline)}</div>
+        </td>
         <td>${daysBadge}</td>
         <td>${statusBadge}</td>
-        <td>
-          <button class="btn btn-ghost btn-sm" onclick="openUpdate(${o.rowIndex},'${o.tracking_no||''}','${o.status}','${o.notes||''}')">✏️</button>
-        </td>
+        <td><button class="btn btn-ghost btn-sm" onclick="openUpdate(${o.rowIndex},'${o.tracking_no||''}','${o.status}','${o.notes||''}')">✏️</button></td>
       </tr>`;
     });
     document.getElementById('tableBody').innerHTML = html;
   }
 
-  function filterOrders(filter, btn) {
-    currentFilter = filter;
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    applyFilter();
-  }
-
-  function applyFilter() {
-    const today = new Date(); today.setHours(0,0,0,0);
-    let filtered = allOrders;
-    if (currentFilter === 'pending') filtered = allOrders.filter(o => o.status === 'pending');
-    else if (currentFilter === 'delivered') filtered = allOrders.filter(o => o.status === 'delivered');
-    else if (currentFilter === 'overdue') {
-      filtered = allOrders.filter(o => {
-        if (o.status !== 'pending') return false;
-        const dl = new Date(o.deadline); dl.setHours(0,0,0,0);
-        return Math.ceil((dl - today) / (1000*60*60*24)) <= 2;
-      });
-    } else if (currentFilter === 'cod') {
-      filtered = allOrders.filter(o => (o.payment_type || 'COD') === 'COD');
-    } else if (currentFilter === 'transfer') {
-      filtered = allOrders.filter(o => o.payment_type === 'transfer');
-    }
-    const q = document.getElementById('searchInput').value.toLowerCase();
-    if (q) filtered = filtered.filter(o =>
-      o.customer_name.toLowerCase().includes(q) ||
-      (o.tracking_no||'').toLowerCase().includes(q)
-    );
-    renderTable(filtered);
-  }
-
-  function searchOrders() { applyFilter(); }
-
   function openAdd() { document.getElementById('addOverlay').classList.add('active'); }
   function closeOverlay(id) { document.getElementById(id).classList.remove('active'); }
 
   async function submitAdd() {
-    const name = document.getElementById('f_name').value.trim();
-    const phone = document.getElementById('f_phone').value.trim();
-    const product = document.getElementById('f_product').value.trim();
-    const amount = document.getElementById('f_amount').value.trim();
-    if (!name||!phone||!product||!amount) { showToast('⚠️ ໃສ່ຂໍ້ມູນໃຫ້ຄົບ','error'); return; }
-    const btn = document.getElementById('addBtn');
-    btn.textContent='ກຳລັງບັນທຶກ...'; btn.disabled=true;
+    const name=document.getElementById('f_name').value.trim();
+    const phone=document.getElementById('f_phone').value.trim();
+    const product=document.getElementById('f_product').value.trim();
+    const amount=document.getElementById('f_amount').value.trim();
+    if(!name||!phone||!product||!amount){showToast('⚠️ ໃສ່ຂໍ້ມູນໃຫ້ຄົບ','error');return;}
+    const btn=document.getElementById('addBtn');
+    btn.textContent='ກຳລັງບັນທຶກ...';btn.disabled=true;
     try {
-      const params = new URLSearchParams({
-        action:'addOrder', customerName:name, customerPhone:phone,
+      const params=new URLSearchParams({
+        action:'addOrder',customerName:name,customerPhone:phone,
         fbId:document.getElementById('f_fbid').value,
-        product, amount,
+        product,amount,
         paymentType:document.getElementById('f_payment').value,
         trackingNo:document.getElementById('f_tracking').value,
         shipper:document.getElementById('f_shipper').value
       });
-      await fetch(API+'?'+params, { method:'GET', mode:'no-cors' });
+      await fetch(API+'?'+params,{method:'GET',mode:'no-cors'});
       closeOverlay('addOverlay');
       showToast('✅ ເພີ່ມ Order ສຳເລັດ!','success');
       ['f_name','f_phone','f_fbid','f_product','f_amount','f_tracking'].forEach(id=>document.getElementById(id).value='');
-      setTimeout(() => loadOrders(), 2500);
-    } catch(e) { showToast('❌ ເກີດຂໍ້ຜິດພາດ','error'); }
-    btn.textContent='💾 ບັນທຶກ'; btn.disabled=false;
+      setTimeout(()=>loadOrders(),2500);
+    } catch(e){showToast('❌ ເກີດຂໍ້ຜິດພາດ','error');}
+    btn.textContent='💾 ບັນທຶກ';btn.disabled=false;
   }
 
-  function openUpdate(rowIndex, tracking, status, notes) {
-    document.getElementById('u_row').value = rowIndex;
-    document.getElementById('u_tracking').value = tracking;
-    document.getElementById('u_status').value = status;
-    document.getElementById('u_notes').value = notes;
+  function openUpdate(rowIndex,tracking,status,notes) {
+    document.getElementById('u_row').value=rowIndex;
+    document.getElementById('u_tracking').value=tracking;
+    document.getElementById('u_status').value=status;
+    document.getElementById('u_notes').value=notes;
     document.getElementById('updateOverlay').classList.add('active');
   }
 
   async function submitUpdate() {
-    const btn = document.getElementById('updateBtn');
-    btn.textContent='ກຳລັງອັບເດດ...'; btn.disabled=true;
+    const btn=document.getElementById('updateBtn');
+    btn.textContent='ກຳລັງອັບເດດ...';btn.disabled=true;
     try {
-      const params = new URLSearchParams({
+      const params=new URLSearchParams({
         action:'updateOrder',
         rowIndex:document.getElementById('u_row').value,
         trackingNo:document.getElementById('u_tracking').value,
         status:document.getElementById('u_status').value,
         notes:document.getElementById('u_notes').value
       });
-      await fetch(API+'?'+params, { method:'GET', mode:'no-cors' });
+      await fetch(API+'?'+params,{method:'GET',mode:'no-cors'});
       closeOverlay('updateOverlay');
       showToast('✅ ອັບເດດສຳເລັດ!','success');
-      setTimeout(() => loadOrders(), 2500);
-    } catch(e) { showToast('❌ ເກີດຂໍ້ຜິດພາດ','error'); }
-    btn.textContent='💾 ອັບເດດ'; btn.disabled=false;
+      setTimeout(()=>loadOrders(),2500);
+    } catch(e){showToast('❌ ເກີດຂໍ້ຜິດພາດ','error');}
+    btn.textContent='💾 ອັບເດດ';btn.disabled=false;
   }
 
-  function showToast(msg, type) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.className = 'toast '+type+' show';
-    setTimeout(()=>t.classList.remove('show'), 3000);
+  function showToast(msg,type) {
+    const t=document.getElementById('toast');
+    t.textContent=msg;t.className='toast '+type+' show';
+    setTimeout(()=>t.classList.remove('show'),3000);
   }
 
-  document.querySelectorAll('.overlay').forEach(o => {
-    o.addEventListener('click', e => { if(e.target===o) o.classList.remove('active'); });
+  document.querySelectorAll('.overlay').forEach(o=>{
+    o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('active');});
   });
 
   window.onload = loadOrders;
