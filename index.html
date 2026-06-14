@@ -381,10 +381,22 @@
     const fromDate = fromVal ? new Date(fromVal) : null;
     const toDate = toVal ? new Date(toVal) : null;
     if (toDate) toDate.setHours(23,59,59,999);
-    const q = document.getElementById('searchInput').value.toLowerCase();
+    const q = document.getElementById('searchInput').value.trim().toLowerCase();
 
     let filtered = allOrders.filter(o => {
-      // Status filter
+      // ---- Search ກ່ອນ (ສຳຄັນທີ່ສຸດ) ----
+      if (q) {
+        const name = (o.customer_name||'').toLowerCase();
+        const phone = (o.customer_phone||'');
+        const tracking = (o.tracking_no||'').toLowerCase();
+        const product = (o.product||'').toLowerCase();
+        const orderId = (o.order_id||'').toLowerCase();
+        const match = name.includes(q) || phone.includes(q) ||
+          tracking.includes(q) || product.includes(q) || orderId.includes(q);
+        if (!match) return false;
+      }
+
+      // ---- Status filter ----
       if (currentFilter === 'pending' && o.status !== 'pending') return false;
       if (currentFilter === 'delivered' && o.status !== 'delivered') return false;
       if (currentFilter === 'returned' && o.status !== 'returned') return false;
@@ -395,20 +407,15 @@
         const dl = new Date(o.deadline); dl.setHours(0,0,0,0);
         if (Math.ceil((dl-today)/(1000*60*60*24)) > 2) return false;
       }
-      // Date filter
+
+      // ---- Date filter ----
       if (fromDate || toDate) {
-        const sd = new Date(o.send_date);
+        const sd = o.send_date ? new Date(o.send_date) : null;
+        if (!sd || isNaN(sd)) return true; // ຖ້າ parse ບໍ່ໄດ້ ໃຫ້ຜ່ານ
         if (fromDate && sd < fromDate) return false;
         if (toDate && sd > toDate) return false;
       }
-      // Search
-      if (q) {
-        const match = o.customer_name.toLowerCase().includes(q) ||
-          o.customer_phone.includes(q) ||
-          (o.tracking_no||'').toLowerCase().includes(q) ||
-          (o.product||'').toLowerCase().includes(q);
-        if (!match) return false;
-      }
+
       return true;
     });
 
