@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>COD Order System</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@300;400;600;700&display=swap');
+
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #22263a;
+    --accent: #6c63ff;
+    --accent2: #ff6584;
+    --green: #00d48b;
+    --yellow: #ffb300;
+    --red: #ff4d6d;
+    --text: #e8eaf6;
+    --text2: #8892b0;
+    --border: rgba(108,99,255,0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans Lao', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .logo-icon {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  .logo-text { font-size: 16px; font-weight: 700; color: var(--text); }
+  .logo-sub { font-size: 11px; color: var(--text2); margin-top: 1px; }
+
+  .header-right { display: flex; gap: 10px; align-items: center; }
+  .last-update { font-size: 11px; color: var(--text2); }
+
+  /* BUTTONS */
+  .btn {
+    padding: 9px 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn-primary { background: var(--accent); color: white; }
+  .btn-primary:hover { background: #5a52e0; transform: translateY(-1px); }
+  .btn-ghost { background: var(--surface2); color: var(--text2); border: 1px solid var(--border); }
+  .btn-ghost:hover { color: var(--text); border-color: var(--accent); }
+  .btn-success { background: var(--green); color: #0a2a1e; }
+  .btn-sm { padding: 5px 12px; font-size: 12px; border-radius: 6px; }
+
+  /* STATS */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    padding: 24px;
+  }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .stat-card.total::before { background: var(--accent); }
+  .stat-card.pending::before { background: var(--yellow); }
+  .stat-card.delivered::before { background: var(--green); }
+  .stat-card.overdue::before { background: var(--red); }
+
+  .stat-label { font-size: 11px; color: var(--text2); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .stat-number { font-size: 36px; font-weight: 700; line-height: 1; }
+  .stat-card.total .stat-number { color: var(--accent); }
+  .stat-card.pending .stat-number { color: var(--yellow); }
+  .stat-card.delivered .stat-number { color: var(--green); }
+  .stat-card.overdue .stat-number { color: var(--red); }
+  .stat-icon { position: absolute; right: 16px; top: 16px; font-size: 24px; opacity: 0.3; }
+
+  /* FILTERS */
+  .filters {
+    padding: 0 24px 16px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .filter-btn {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text2);
+    font-family: inherit;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .filter-btn.active, .filter-btn:hover {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+  }
+  .search-box {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 12px;
+  }
+  .search-box input {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 13px;
+    width: 180px;
+  }
+  .search-box input::placeholder { color: var(--text2); }
+
+  /* TABLE */
+  .table-section { padding: 0 24px 24px; }
+  .table-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  table { width: 100%; border-collapse: collapse; }
+  thead tr { background: var(--surface2); }
+  th {
+    padding: 13px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 14px 16px;
+    font-size: 13px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    vertical-align: middle;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(108,99,255,0.05); }
+
+  .order-id { font-size: 11px; color: var(--text2); font-family: monospace; }
+  .customer-name { font-weight: 600; color: var(--text); }
+  .customer-phone { font-size: 11px; color: var(--text2); margin-top: 2px; }
+
+  /* BADGES */
+  .badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    display: inline-block;
+  }
+  .badge-pending { background: rgba(255,179,0,0.15); color: var(--yellow); }
+  .badge-delivered { background: rgba(0,212,139,0.15); color: var(--green); }
+  .badge-overdue { background: rgba(255,77,109,0.15); color: var(--red); }
+  .badge-cancelled { background: rgba(136,146,176,0.15); color: var(--text2); }
+
+  /* DAYS LEFT */
+  .days-badge {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    display: inline-block;
+  }
+  .days-ok { background: rgba(0,212,139,0.1); color: var(--green); }
+  .days-warn { background: rgba(255,179,0,0.1); color: var(--yellow); }
+  .days-critical { background: rgba(255,77,109,0.15); color: var(--red); }
+  .days-done { color: var(--green); font-size: 16px; }
+
+  /* EMPTY STATE */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text2);
+  }
+  .empty-state .icon { font-size: 48px; margin-bottom: 12px; opacity: 0.5; }
+  .empty-state p { font-size: 14px; }
+
+  /* LOADING */
+  .loading {
+    text-align: center;
+    padding: 40px;
+    color: var(--text2);
+    font-size: 13px;
+  }
+  .spinner {
+    width: 24px; height: 24px;
+    border: 2px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 12px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* MODAL */
+  .overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 200;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(4px);
+  }
+  .overlay.active { display: flex; }
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    width: 90%;
+    max-width: 480px;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: slideUp 0.2s ease;
+  }
+  @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } }
+  .modal-title { font-size: 18px; font-weight: 700; margin-bottom: 24px; }
+
+  .form-group { margin-bottom: 16px; }
+  .form-label { display: block; font-size: 12px; font-weight: 600; color: var(--text2); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .form-input, .form-select {
+    width: 100%;
+    padding: 10px 14px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-input:focus, .form-select:focus { border-color: var(--accent); }
+  .form-select option { background: var(--surface2); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  .modal-footer { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 20px;
+    font-size: 13px;
+    z-index: 999;
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 220px;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast.success { border-left: 3px solid var(--green); }
+  .toast.error { border-left: 3px solid var(--red); }
+
+  @media (max-width: 768px) {
+    .stats { grid-template-columns: repeat(2, 1fr); padding: 16px; gap: 12px; }
+    .filters { padding: 0 16px 12px; }
+    .search-box { margin-left: 0; width: 100%; }
+    .search-box input { width: 100%; }
+    .table-section { padding: 0 16px 16px; }
+    .header { padding: 12px 16px; }
+    .form-row { grid-template-columns: 1fr; }
+    th:nth-child(3), td:nth-child(3),
+    th:nth-child(5), td:nth-child(5) { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">
+    <div class="logo-icon">📦</div>
+    <div>
+      <div class="logo-text">COD Order System</div>
+      <div class="logo-sub" id="lastUpdate">ກຳລັງໂຫຼດ...</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <button class="btn btn-ghost btn-sm" onclick="loadOrders()">🔄 ໂຫຼດໃໝ່</button>
+    <button class="btn btn-primary" onclick="openAdd()">+ ເພີ່ມ Order</button>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat-card total">
+    <div class="stat-icon">📋</div>
+    <div class="stat-label">ທັງໝົດ</div>
+    <div class="stat-number" id="sTotal">-</div>
+  </div>
+  <div class="stat-card pending">
+    <div class="stat-icon">⏳</div>
+    <div class="stat-label">ລໍຖ້າຮັບ</div>
+    <div class="stat-number" id="sPending">-</div>
+  </div>
+  <div class="stat-card delivered">
+    <div class="stat-icon">✅</div>
+    <div class="stat-label">ຮັບແລ້ວ</div>
+    <div class="stat-number" id="sDelivered">-</div>
+  </div>
+  <div class="stat-card overdue">
+    <div class="stat-icon">⚠️</div>
+    <div class="stat-label">ໃກ້ຕີກັບ</div>
+    <div class="stat-number" id="sOverdue">-</div>
+  </div>
+</div>
+
+<!-- FILTERS -->
+<div class="filters">
+  <button class="filter-btn active" onclick="filterOrders('all', this)">ທັງໝົດ</button>
+  <button class="filter-btn" onclick="filterOrders('pending', this)">⏳ ລໍຖ້າ</button>
+  <button class="filter-btn" onclick="filterOrders('delivered', this)">✅ ຮັບແລ້ວ</button>
+  <button class="filter-btn" onclick="filterOrders('overdue', this)">⚠️ ໃກ້ຕີກັບ</button>
+  <div class="search-box">
+    <span style="color:var(--text2);font-size:14px">🔍</span>
+    <input type="text" id="searchInput" placeholder="ຊອກຫາຊື່ / ເລກທາງ..." oninput="searchOrders()">
+  </div>
+</div>
+
+<!-- TABLE -->
+<div class="table-section">
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Order</th>
+          <th>ລູກຄ້າ</th>
+          <th>ສິນຄ້າ</th>
+          <th>ຂົນສົ່ງ</th>
+          <th>ເລກທາງ</th>
+          <th>ເຫຼືອ</th>
+          <th>ສະຖານະ</th>
+          <th>ຈັດການ</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+        <tr><td colspan="8"><div class="loading"><div class="spinner"></div>ກຳລັງໂຫຼດ...</div></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- MODAL ເພີ່ມ ORDER -->
+<div class="overlay" id="addOverlay">
+  <div class="modal">
+    <div class="modal-title">➕ ເພີ່ມ Order ໃໝ່</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">ຊື່ລູກຄ້າ *</label>
+        <input class="form-input" id="f_name" placeholder="ຊື່ ນາມສະກຸນ">
+      </div>
+      <div class="form-group">
+        <label class="form-label">ເບີໂທ *</label>
+        <input class="form-input" id="f_phone" placeholder="020xxxxxxxx">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Facebook ID (ຖ້າມີ)</label>
+      <input class="form-input" id="f_fbid" placeholder="ປ່ອຍຫວ່າງໄດ້">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">ສິນຄ້າ *</label>
+        <input class="form-input" id="f_product" placeholder="ເຊັ່ນ: ເສື້ອ Size M">
+      </div>
+      <div class="form-group">
+        <label class="form-label">ລາຄາ (ກີບ) *</label>
+        <input class="form-input" type="number" id="f_amount" placeholder="150000">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">ເລກທາງ</label>
+        <input class="form-input" id="f_tracking" placeholder="ໃສ່ທີຫຼັງໄດ້">
+      </div>
+      <div class="form-group">
+        <label class="form-label">ຂົນສົ່ງ *</label>
+        <select class="form-select" id="f_shipper">
+          <option value="ຢູນິເທວ">ຢູນິເທວ</option>
+          <option value="ອະນຸສິດ">ອະນຸສິດ</option>
+          <option value="ຮຸ່ງອາລຸນ">ຮຸ່ງອາລຸນ</option>
+          <option value="ມີໄຊ">ມີໄຊ</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeOverlay('addOverlay')">ຍົກເລີກ</button>
+      <button class="btn btn-primary" onclick="submitAdd()" id="addBtn">💾 ບັນທຶກ</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ອັບເດດ -->
+<div class="overlay" id="updateOverlay">
+  <div class="modal">
+    <div class="modal-title">✏️ ອັບເດດ Order</div>
+    <input type="hidden" id="u_row">
+    <div class="form-group">
+      <label class="form-label">ເລກທາງ</label>
+      <input class="form-input" id="u_tracking" placeholder="ເລກພັດສະດຸ">
+    </div>
+    <div class="form-group">
+      <label class="form-label">ສະຖານະ</label>
+      <select class="form-select" id="u_status">
+        <option value="pending">⏳ ລໍຖ້າຮັບ</option>
+        <option value="delivered">✅ ຮັບແລ້ວ</option>
+        <option value="cancelled">❌ ຍົກເລີກ</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">ໝາຍເຫດ</label>
+      <input class="form-input" id="u_notes" placeholder="(ຖ້າມີ)">
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeOverlay('updateOverlay')">ຍົກເລີກ</button>
+      <button class="btn btn-success" onclick="submitUpdate()" id="updateBtn">💾 ອັບເດດ</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+  const API = 'https://script.google.com/macros/s/AKfycbyX5DPpqn7TqvfkotdzwO7tdQJlAqnnyuZ5vjWX95bfgugr_26QR425pLWxE81DkRv4/exec';
+  let allOrders = [];
+  let currentFilter = 'all';
+
+  // ໂຫຼດ Orders
+  async function loadOrders() {
+    document.getElementById('tableBody').innerHTML =
+      '<tr><td colspan="8"><div class="loading"><div class="spinner"></div>ກຳລັງໂຫຼດ...</div></td></tr>';
+    try {
+      const res = await fetch(API + '?action=getOrders');
+      const data = await res.json();
+      allOrders = data.orders || [];
+      renderTable(allOrders);
+      updateStats(allOrders);
+      document.getElementById('lastUpdate').textContent =
+        'ອັບເດດ: ' + new Date().toLocaleTimeString('lo-LA');
+    } catch (e) {
+      document.getElementById('tableBody').innerHTML =
+        '<tr><td colspan="8"><div class="empty-state"><div class="icon">⚠️</div><p>ໂຫຼດບໍ່ໄດ້ — ກວດສອບ API</p></div></td></tr>';
+    }
+  }
+
+  // ສ້າງຕາຕະລາງ
+  function renderTable(orders) {
+    if (!orders.length) {
+      document.getElementById('tableBody').innerHTML =
+        '<tr><td colspan="8"><div class="empty-state"><div class="icon">📭</div><p>ຍັງບໍ່ມີ Order</p></div></td></tr>';
+      return;
+    }
+    const today = new Date(); today.setHours(0,0,0,0);
+    let html = '';
+    orders.forEach(o => {
+      const deadline = new Date(o.deadline); deadline.setHours(0,0,0,0);
+      const daysLeft = Math.ceil((deadline - today) / (1000*60*60*24));
+      let statusBadge = '', daysBadge = '', rowClass = '';
+
+      if (o.status === 'delivered') {
+        statusBadge = '<span class="badge badge-delivered">✅ ຮັບແລ້ວ</span>';
+        daysBadge = '<span class="days-done">✅</span>';
+      } else if (o.status === 'cancelled') {
+        statusBadge = '<span class="badge badge-cancelled">❌ ຍົກເລີກ</span>';
+        daysBadge = '-';
+      } else if (daysLeft < 0) {
+        statusBadge = '<span class="badge badge-overdue">⚠️ ເກີນກຳນົດ</span>';
+        daysBadge = `<span class="days-badge days-critical">${Math.abs(daysLeft)} ວັນ</span>`;
+      } else {
+        statusBadge = '<span class="badge badge-pending">⏳ ລໍຖ້າ</span>';
+        const cls = daysLeft <= 1 ? 'days-critical' : daysLeft <= 3 ? 'days-warn' : 'days-ok';
+        daysBadge = `<span class="days-badge ${cls}">${daysLeft} ວັນ</span>`;
+      }
+
+      html += `<tr>
+        <td><div class="order-id">${o.order_id}</div></td>
+        <td>
+          <div class="customer-name">${o.customer_name}</div>
+          <div class="customer-phone">${o.customer_phone}</div>
+        </td>
+        <td>${o.product}</td>
+        <td>${o.shipper}</td>
+        <td>${o.tracking_no || '<span style="color:var(--text2)">-</span>'}</td>
+        <td>${daysBadge}</td>
+        <td>${statusBadge}</td>
+        <td>
+          <button class="btn btn-ghost btn-sm" onclick="openUpdate(${o.rowIndex},'${o.tracking_no||''}','${o.status}','${o.notes||''}')">✏️</button>
+        </td>
+      </tr>`;
+    });
+    document.getElementById('tableBody').innerHTML = html;
+  }
+
+  // Stats
+  function updateStats(orders) {
+    const today = new Date(); today.setHours(0,0,0,0);
+    let pending = 0, delivered = 0, overdue = 0;
+    orders.forEach(o => {
+      if (o.status === 'delivered') { delivered++; return; }
+      if (o.status === 'cancelled') return;
+      const dl = new Date(o.deadline); dl.setHours(0,0,0,0);
+      const days = Math.ceil((dl - today) / (1000*60*60*24));
+      if (days <= 2 && days >= 0) overdue++;
+      pending++;
+    });
+    document.getElementById('sTotal').textContent = orders.length;
+    document.getElementById('sPending').textContent = pending;
+    document.getElementById('sDelivered').textContent = delivered;
+    document.getElementById('sOverdue').textContent = overdue;
+  }
+
+  // Filter
+  function filterOrders(filter, btn) {
+    currentFilter = filter;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    applyFilter();
+  }
+
+  function applyFilter() {
+    const today = new Date(); today.setHours(0,0,0,0);
+    let filtered = allOrders;
+    if (currentFilter === 'pending') filtered = allOrders.filter(o => o.status === 'pending');
+    else if (currentFilter === 'delivered') filtered = allOrders.filter(o => o.status === 'delivered');
+    else if (currentFilter === 'overdue') {
+      filtered = allOrders.filter(o => {
+        if (o.status !== 'pending') return false;
+        const dl = new Date(o.deadline); dl.setHours(0,0,0,0);
+        return Math.ceil((dl - today) / (1000*60*60*24)) <= 2;
+      });
+    }
+    const q = document.getElementById('searchInput').value.toLowerCase();
+    if (q) filtered = filtered.filter(o =>
+      o.customer_name.toLowerCase().includes(q) ||
+      (o.tracking_no || '').toLowerCase().includes(q)
+    );
+    renderTable(filtered);
+  }
+
+  function searchOrders() { applyFilter(); }
+
+  // Modal Add
+  function openAdd() { document.getElementById('addOverlay').classList.add('active'); }
+  function closeOverlay(id) { document.getElementById(id).classList.remove('active'); }
+
+  async function submitAdd() {
+    const name = document.getElementById('f_name').value.trim();
+    const phone = document.getElementById('f_phone').value.trim();
+    const product = document.getElementById('f_product').value.trim();
+    const amount = document.getElementById('f_amount').value.trim();
+    if (!name || !phone || !product || !amount) { showToast('⚠️ ໃສ່ຂໍ້ມູນໃຫ້ຄົບ', 'error'); return; }
+
+    const btn = document.getElementById('addBtn');
+    btn.textContent = 'ກຳລັງບັນທຶກ...'; btn.disabled = true;
+
+    try {
+      const params = new URLSearchParams({
+        action: 'addOrder',
+        customerName: name,
+        customerPhone: phone,
+        fbId: document.getElementById('f_fbid').value,
+        product: product,
+        amount: amount,
+        trackingNo: document.getElementById('f_tracking').value,
+        shipper: document.getElementById('f_shipper').value
+      });
+      await fetch(API + '?' + params);
+      closeOverlay('addOverlay');
+      showToast('✅ ເພີ່ມ Order ສຳເລັດ!', 'success');
+      loadOrders();
+      ['f_name','f_phone','f_fbid','f_product','f_amount','f_tracking'].forEach(id => document.getElementById(id).value = '');
+    } catch(e) {
+      showToast('❌ ເກີດຂໍ້ຜິດພາດ', 'error');
+    }
+    btn.textContent = '💾 ບັນທຶກ'; btn.disabled = false;
+  }
+
+  // Modal Update
+  function openUpdate(rowIndex, tracking, status, notes) {
+    document.getElementById('u_row').value = rowIndex;
+    document.getElementById('u_tracking').value = tracking;
+    document.getElementById('u_status').value = status;
+    document.getElementById('u_notes').value = notes;
+    document.getElementById('updateOverlay').classList.add('active');
+  }
+
+  async function submitUpdate() {
+    const btn = document.getElementById('updateBtn');
+    btn.textContent = 'ກຳລັງອັບເດດ...'; btn.disabled = true;
+    try {
+      const params = new URLSearchParams({
+        action: 'updateOrder',
+        rowIndex: document.getElementById('u_row').value,
+        trackingNo: document.getElementById('u_tracking').value,
+        status: document.getElementById('u_status').value,
+        notes: document.getElementById('u_notes').value
+      });
+      await fetch(API + '?' + params);
+      closeOverlay('updateOverlay');
+      showToast('✅ ອັບເດດສຳເລັດ!', 'success');
+      loadOrders();
+    } catch(e) {
+      showToast('❌ ເກີດຂໍ້ຜິດພາດ', 'error');
+    }
+    btn.textContent = '💾 ອັບເດດ'; btn.disabled = false;
+  }
+
+  // Toast
+  function showToast(msg, type) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast ' + type + ' show';
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  // Close overlay on background click
+  document.querySelectorAll('.overlay').forEach(o => {
+    o.addEventListener('click', e => { if (e.target === o) o.classList.remove('active'); });
+  });
+
+  window.onload = loadOrders;
+</script>
+</body>
+</html>
