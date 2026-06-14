@@ -384,14 +384,13 @@
     const q = document.getElementById('searchInput').value.trim().toLowerCase();
 
     let filtered = allOrders.filter(o => {
-      // ---- Search ກ່ອນ (ສຳຄັນທີ່ສຸດ) ----
       if (q) {
-        const name = String(o.customer_name||'').trim().toLowerCase();
-        const phone = String(o.customer_phone||'').trim();
-        const tracking = String(o.tracking_no||'').trim().toLowerCase();
+        const name = String(o.customer_name||'').toLowerCase();
+        const phone = String(o.customer_phone||'');
+        const tracking = String(o.tracking_no||'').toLowerCase();
         const product = String(o.product||'').toLowerCase();
         const orderId = String(o.order_id||'').toLowerCase();
-        console.log("search:", q, "name:", name); const match = name.includes(q) || phone.includes(q) ||
+        const match = name.includes(q) || phone.includes(q) ||
           tracking.includes(q) || product.includes(q) || orderId.includes(q);
         if (!match) return false;
       }
