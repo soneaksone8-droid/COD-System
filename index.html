@@ -386,12 +386,12 @@
     let filtered = allOrders.filter(o => {
       // ---- Search ກ່ອນ (ສຳຄັນທີ່ສຸດ) ----
       if (q) {
-        const name = (o.customer_name||'').toLowerCase();
-        const phone = (o.customer_phone||'');
-        const tracking = (o.tracking_no||'').toLowerCase();
+        const name = (o.customer_name||'').trim().toLowerCase();
+        const phone = (o.customer_phone||'').trim();
+        const tracking = (o.tracking_no||'').trim().toLowerCase();
         const product = (o.product||'').toLowerCase();
         const orderId = (o.order_id||'').toLowerCase();
-        const match = name.includes(q) || phone.includes(q) ||
+        console.log("search:", q, "name:", name); const match = name.includes(q) || phone.includes(q) ||
           tracking.includes(q) || product.includes(q) || orderId.includes(q);
         if (!match) return false;
       }
@@ -410,10 +410,14 @@
 
       // ---- Date filter ----
       if (fromDate || toDate) {
-        const sd = o.send_date ? new Date(o.send_date) : null;
-        if (!sd || isNaN(sd)) return true; // ຖ້າ parse ບໍ່ໄດ້ ໃຫ້ຜ່ານ
-        if (fromDate && sd < fromDate) return false;
-        if (toDate && sd > toDate) return false;
+        if (!o.send_date) return true;
+        const sd = new Date(o.send_date);
+        if (isNaN(sd)) return true;
+        const sdLocal = new Date(sd.getFullYear(), sd.getMonth(), sd.getDate());
+        const fromLocal = fromDate ? new Date(fromDate.getFullYear(), fromDate.getMonth(), fromDate.getDate()) : null;
+        const toLocal = toDate ? new Date(toDate.getFullYear(), toDate.getMonth(), toDate.getDate()) : null;
+        if (fromLocal && sdLocal < fromLocal) return false;
+        if (toLocal && sdLocal > toLocal) return false;
       }
 
       return true;
