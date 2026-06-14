@@ -386,11 +386,11 @@
     let filtered = allOrders.filter(o => {
       // ---- Search ກ່ອນ (ສຳຄັນທີ່ສຸດ) ----
       if (q) {
-        const name = (o.customer_name||'').trim().toLowerCase();
-        const phone = (o.customer_phone||'').trim();
-        const tracking = (o.tracking_no||'').trim().toLowerCase();
-        const product = (o.product||'').toLowerCase();
-        const orderId = (o.order_id||'').toLowerCase();
+        const name = String(o.customer_name||'').trim().toLowerCase();
+        const phone = String(o.customer_phone||'').trim();
+        const tracking = String(o.tracking_no||'').trim().toLowerCase();
+        const product = String(o.product||'').toLowerCase();
+        const orderId = String(o.order_id||'').toLowerCase();
         console.log("search:", q, "name:", name); const match = name.includes(q) || phone.includes(q) ||
           tracking.includes(q) || product.includes(q) || orderId.includes(q);
         if (!match) return false;
